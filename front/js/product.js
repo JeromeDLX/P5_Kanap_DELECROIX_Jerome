@@ -4,7 +4,7 @@ const urlParams = new URLSearchParams(queryString)
 const productId = urlParams.get("id")
 if (productId !=null){
     let prixIndividuel = 0
-    let imgUrl, altText
+    let imgUrl, altText, nameArticle
 }
 
 //Appel de l'API et, récupération des données du canapé
@@ -23,6 +23,7 @@ function kanapindividuel(canapé){
     créationCouleursCanapé(colors)
     imgUrl = imageUrl
     altText = altTxt
+    nameArticle = name
 }
 
 // Création de l'image et, de son AltText sous forme d'élément HTML
@@ -75,15 +76,17 @@ if (boutonAjoutPanier !=null){
             alert("S'il vous plait choisissez une couleur et une quantité")
             return
         }
+        const key = `${productId}-${couleur}`
         const dataLocalStorage = {
             productId: productId,
             couleur: couleur,
             quantité: Number(quantité),
             price: prixIndividuel,
             imageUrl: imgUrl,
-            altTxt: altText
+            altTxt: altText,
+            name: nameArticle
         }
-        localStorage.setItem(productId, JSON.stringify(dataLocalStorage))
+        localStorage.setItem(key, JSON.stringify(dataLocalStorage))
         window.location.href = "cart.html"
     })
 }
