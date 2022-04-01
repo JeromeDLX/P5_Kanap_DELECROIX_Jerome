@@ -2,10 +2,6 @@
 const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString)
 const productId = urlParams.get("id")
-if (productId !=null){
-    let prixIndividuel = 0
-    let imgUrl, altText, nameArticle
-}
 
 //Appel de l'API et, récupération des données du canapé
 fetch(`http://localhost:3000/api/products/${productId}`)
@@ -13,20 +9,24 @@ fetch(`http://localhost:3000/api/products/${productId}`)
     .then (données => kanapindividuel(données))
 
 function kanapindividuel(canapé){
+    // Destructuring informations à récupérer du canapé
     const {altTxt, colors, description, imageUrl, name, price} = canapé
     
-    prixIndividuel = price
+    // Ajout des fonctions créés pour construire la page produit
     créationImageCanapé(imageUrl, altTxt)
     créationTitreCanapé(name)
     créationPrixCanapé(price)
     créationDescriptionCanapé(description)
     créationCouleursCanapé(colors)
+    
+    // Informations à afficher sur la page du canapé
+    prixIndividuel = price
     imgUrl = imageUrl
     altText = altTxt
     nameArticle = name
 }
 
-// Création de l'image et, de son AltText sous forme d'élément HTML
+// Création de la div d'image avec, son AltText sous forme d'élément HTML
 function créationImageCanapé(imageUrl, altTxt){
     const image = document.createElement("img")
     image.src = imageUrl
@@ -53,7 +53,7 @@ function créationDescriptionCanapé(description){
     if (descriptionProduit !=null)descriptionProduit.textContent = description
 }
 
-// Création du menu des couelurs de chaque canapé
+// Création du menu des couleurs de chaque canapés
 function créationCouleursCanapé(colors){
     const menuDéroulant = document.querySelector("#colors")
     if (menuDéroulant !=null){
@@ -76,6 +76,7 @@ if (boutonAjoutPanier !=null){
             alert("S'il vous plait choisissez une couleur et une quantité")
             return
         }
+        // Une fois selection faite sauvegarde des données dans le LocalStorage
         const key = `${productId}-${couleur}`
         const dataLocalStorage = {
             productId: productId,

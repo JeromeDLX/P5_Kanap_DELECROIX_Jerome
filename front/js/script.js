@@ -1,29 +1,32 @@
-//Appel de l'API et, récupération des données
+//Appel de l'API et, récupération des données et ajout des produits
 fetch("http://localhost:3000/api/products")
     .then(reponse => reponse.json())
     .then (données => ajoutProduits(données))
 
+// Fonction pour l'ajout des produits à la galerie
 function ajoutProduits(canapés){
+    
     // Loop pour récupération des infos de tout les canapés
     canapés.forEach(canapé => {
-        // Destructuring 
+        // Destructuring données à prendre pour chaque canapé
         const {_id, imageUrl, altTxt, name, description} = canapé
         
-        //Appel de tous les éléments pour créer la carte des canapés
+        // Création de l'article qui contiendra infos du canapé
         const Article = document.createElement("Article")
         
+        // Ajout des fonctions créés pour construire l'article
         const Ancre = créationAncre(_id) 
         const Image = créationImage(imageUrl, altTxt)
         const Titre = créationTitre(name)
         const Descriptif = créationDescriptif(description)
         
-        //Ajout des éléments à chaque cartes
+        // Elements à ajouter à une carte article
         appendElementsAuxCartes(Article, Image, Titre, Descriptif)
         appendArticleVersAncre(Ancre, Article)
     })
 }
 
-// Ajout de tous les éléments créés à une carte
+// Fonction d'ajout de tous les éléments créé à une carte
 function appendElementsAuxCartes(Article, Image, Titre, Descriptif){
     Article.appendChild(Image)
     Article.appendChild(Titre)
