@@ -1,3 +1,4 @@
+// Récupération, affichage du numéro de commande, puis clean du local storage
 const numeroCommande = recuperationNumeroCommande()
 affichageNumeroCommande(numeroCommande)
 nettoyageDuLocalStorage()

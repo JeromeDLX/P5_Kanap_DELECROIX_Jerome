@@ -1,5 +1,7 @@
+// Création array du panier
 const panier = [];
 
+// Appel des fonctions des données récupérées et, des éléments à afficher
 récupérationCanapéAjoutéPanier()
 panier.forEach(item => displayItem(item))
 
@@ -27,6 +29,7 @@ function displayItem(item){
     displayPrixTotalArticle()
 }
 
+// Function de mise en place de l'article
 function displayArticle(article){
    document.querySelector("#cart__items").appendChild(article)
 }
@@ -142,17 +145,6 @@ function suppressionCanapéPanier(item){
     suppressionArticleDePage(item)
 }
 
-// Création de la div "cart__price" et affichage prix total panier, sous forme HTML
-function displayPrixTotalArticle(){
-    let totalArticle = 0;
-    const totalPrix = document.querySelector("#totalPrice")
-    panier.forEach(canapé => {
-    const prixTotalUnitaire = canapé.price * canapé.quantité
-    totalArticle += prixTotalUnitaire
-    totalPrix.textContent = totalArticle
-    })
-}
-
 // Création de la div "cart__price" et affichage quantité totale article panier, sous forme HTML
 function displayQuantitéTotaleArticle(){
     let totalArticle = 0;
@@ -161,6 +153,17 @@ function displayQuantitéTotaleArticle(){
     const quantitéTotalUnitaire = canapé.quantité
     totalArticle += quantitéTotalUnitaire
     totalQuantité.textContent = totalArticle
+    })
+}
+
+// Création de la div "cart__price" et affichage prix total panier, sous forme HTML
+function displayPrixTotalArticle(){
+    let totalArticle = 0;
+    const totalPrix = document.querySelector("#totalPrice")
+    panier.forEach(canapé => {
+    const prixTotalUnitaire = canapé.price * canapé.quantité
+    totalArticle += prixTotalUnitaire
+    totalPrix.textContent = totalArticle
     })
 }
 
@@ -196,7 +199,6 @@ function suppressionArticleDePage(item){
     location.reload()
 }
 
-
 // Mise en place du bouton de commande
 const boutonCommande = document.querySelector("#order")
 boutonCommande.addEventListener("click", (e) => formulaireDeCommande(e))
@@ -205,9 +207,10 @@ boutonCommande.addEventListener("click", (e) => formulaireDeCommande(e))
 function formulaireDeCommande(e){
     e.preventDefault()
     if (panier.length === 0) {
-    alert("Oups ! Vérifie bien le panier et tes informations")
+    alert("Oups ! Votre panier a l'air vide")
     return
 }
+
 // Vérification de la validité de tout les champs du formulaire
     if (siFormulaireNonComplet()) return
     if (siEmailNonValide()) return
@@ -228,6 +231,7 @@ function formulaireDeCommande(e){
         .catch((error) => console.error(error))
 }
 
+// Création des champs du formulaire à remplir
 function creationCorpsDuFormulaire(){
     const form = document.querySelector(".cart__order__form")
 
@@ -250,6 +254,7 @@ function creationCorpsDuFormulaire(){
     return corps
 }
 
+// Fonction de récupération des id des canapés séléctionnés
 function recupIdDuCache(){
     const nombreProduitsAjoutés = localStorage.length
     const idProduits = []
@@ -262,16 +267,17 @@ function recupIdDuCache(){
 }
 
 // Fonction de vérification de la completion de tout les champs du formulaire
-function siFormulaireNonComplet() {
+function siFormulaireNonComplet(){
     const form = document.querySelector(".cart__order__form")
-    const inputsFormulaire = form.querySelectorAll("input")
-    inputsFormulaire.forEach((input) => {
+    const inputsFormulaire = form.querySelectorAll('input')
+
+    for (input of inputsFormulaire) {
         if (input.value === "") {
-            alert("Veille à bien remplir tout les champs")
+            alert("Veillez à bien remplir tout les champs")
             return true
         }
         return false
-    })
+    }
 }
 
 // Fonction de vérification de la validité de l'adresse mail avec modèle REGEX
@@ -279,7 +285,7 @@ function siEmailNonValide(){
     const verifEmail = document.querySelector("#email").value
     const modeleRegex = /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
         if (modeleRegex.test(verifEmail) === false) {
-            alert("Vérifie bien ton adresse email")
+            alert("Vérifiez bien votre adresse email")
             return true
         }
         return false
