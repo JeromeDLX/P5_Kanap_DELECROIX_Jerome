@@ -6,20 +6,20 @@ const productId = urlParams.get("id")
 //Appel de l'API et, récupération des données du canapé
 fetch(`http://localhost:3000/api/products/${productId}`)
     .then(reponse => reponse.json())
-    .then (données => kanapindividuel(données))
+    .then (data => kanapindividuel(data))
 
 function kanapindividuel(canapé){
     // Destructuring informations à récupérer du canapé
     const {altTxt, colors, description, imageUrl, name, price} = canapé
     
     // Ajout des fonctions créés pour construire la page produit
-    créationImageCanapé(imageUrl, altTxt)
-    créationTitreCanapé(name)
-    créationPrixCanapé(price)
-    créationDescriptionCanapé(description)
-    créationCouleursCanapé(colors)
+    creationImageCanape(imageUrl, altTxt)
+    creationTitreCanape(name)
+    creationPrixCanape(price)
+    creationDescriptionCanape(description)
+    creationCouleursCanape(colors)
     
-    // Informations à afficher sur la page du canapé
+    // Informations à afficher et à integrer sur la page du canapé
     prixIndividuel = price
     imgUrl = imageUrl
     altText = altTxt
@@ -27,7 +27,7 @@ function kanapindividuel(canapé){
 }
 
 // Création de la div d'image avec, son AltText sous forme d'élément HTML
-function créationImageCanapé(imageUrl, altTxt){
+function creationImageCanape(imageUrl, altTxt){
     const image = document.createElement("img")
     image.src = imageUrl
     image.alt = altTxt
@@ -36,25 +36,25 @@ function créationImageCanapé(imageUrl, altTxt){
 }
 
 // Création du nom de chaque canapé, sous forme d'élément HTML
-function créationTitreCanapé(name){
+function creationTitreCanape(name){
     const titreProduit = document.querySelector("#title")
     if (titreProduit !=null)titreProduit.textContent = name
 }
 
 // Création du prix de chaque canapé, sous forme d'élément HTML
-function créationPrixCanapé(price){
+function creationPrixCanape(price){
     const priceProduit = document.querySelector("#price")
     if (priceProduit !=null)priceProduit.textContent = price
 }
 
 // Création de la decription de chaque canapé, sous forme d'élément HTML
-function créationDescriptionCanapé(description){
+function creationDescriptionCanape(description){
     const descriptionProduit = document.querySelector("#description")
     if (descriptionProduit !=null)descriptionProduit.textContent = description
 }
 
 // Création du menu des couleurs de chaque canapés
-function créationCouleursCanapé(colors){
+function creationCouleursCanape(colors){
     const menuDéroulant = document.querySelector("#colors")
     if (menuDéroulant !=null){
        colors.forEach((color) => {
@@ -66,17 +66,17 @@ function créationCouleursCanapé(colors){
     }
 }
 
-// Création alerte de quantité ou, couleur non séléctionné
+// Création alerte de quantité ou, couleur non sélectionné
 const boutonAjoutPanier = document.querySelector("#addToCart")
 if (boutonAjoutPanier !=null){
     boutonAjoutPanier.addEventListener("click", (e) => {
         const couleur = document.querySelector("#colors").value
         const quantité = document.querySelector("#quantity").value
-        if (couleur == null || couleur === "" || quantité == null || quantité == 0){
-            alert("S'il vous plait choisissez une couleur et une quantité")
+        if (couleur == null || couleur === "" || quantité == null || quantité <0 || quantité == 0 || quantité >100) {
+            alert("S'il vous plait choisissez une couleur et une quantité valide")
             return
         }
-        // Une fois selection faite sauvegarde des données dans le LocalStorage
+        // Une fois selection faite sauvegarde des données dans le LocalStorage puis renvoit vers cart
         const key = `${productId}-${couleur}`
         const dataLocalStorage = {
             productId: productId,
