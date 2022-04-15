@@ -21,4 +21,3 @@ function nettoyageDuLocalStorage(){
     const vidageDuCache = window.localStorage
     vidageDuCache.clear()
 }
-
