@@ -15,10 +15,10 @@ function ajoutProduits(canapés){
         const Article = document.createElement("Article")
         
         // Ajout des fonctions créés pour construire l'article
-        const Ancre = créationAncre(_id) 
-        const Image = créationImage(imageUrl, altTxt)
-        const Titre = créationTitre(name)
-        const Descriptif = créationDescriptif(description)
+        const Ancre = creationAncre(_id) 
+        const Image = creationImage(imageUrl, altTxt)
+        const Titre = creationTitre(name)
+        const Descriptif = creationDescriptif(description)
         
         // Elements à ajouter à une carte article
         appendElementsAuxCartes(Article, Image, Titre, Descriptif)
@@ -41,14 +41,14 @@ function appendArticleVersAncre(Ancre, Article){
 }
 
 // Création du a href de chaque canapé avec, ID associé, sous forme d'élément HTML
-function créationAncre(id){
+function creationAncre(id){
     const ancre  = document.createElement("a")
     ancre.href = "./product.html?id=" + id
     return ancre
 }
 
 // Création de l'image et, de son AltText sous forme d'élément HTML
-function créationImage(imageUrl, altTxt){
+function creationImage(imageUrl, altTxt){
     const image = document.createElement("img")
     image.src = imageUrl
     image.alt = altTxt
@@ -56,17 +56,20 @@ function créationImage(imageUrl, altTxt){
 }
 
 // Création du nom de chaque canapé, sous forme d'élément HTML
-function créationTitre(name){ 
+function creationTitre(name){ 
     const Titre = document.createElement("Titre")
     Titre.textContent = name
+    Titre.style.margin = "20px 0px 10px 0px";
     Titre.classList = ("productName")
     return Titre
 }
 
 // Création de la decription de chaque canapé, sous forme d'élément HTML
-function créationDescriptif(description){  
+function creationDescriptif(description){  
     const Descriptif = document.createElement("Descriptif")
     Descriptif.textContent = description
+    Descriptif.style.margin = "10px 15px 15px 15px"
+    Descriptif.style.textAlign = "center"
     Descriptif.classList.add("productDescription")
     return Descriptif
 }
