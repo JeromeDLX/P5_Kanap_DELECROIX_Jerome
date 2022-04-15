@@ -2,14 +2,14 @@
 const panier = [];
 
 // Appel des fonctions des données récupérées et, des éléments à afficher
-récupérationCanapéAjoutéPanier()
+recuperationCanapeAjoutePanier()
 panier.forEach(item => displayItem(item))
 
 // Récupération des données du ou des canapés en cache dans le panier
-function récupérationCanapéAjoutéPanier() {
+function recuperationCanapeAjoutePanier() {
     const nombreProduitsAjoutés = localStorage.length
     for (let index = 0; index < nombreProduitsAjoutés; index++) {
-        const item = localStorage.getItem(localStorage.key(index)) || ""
+        const item = localStorage.getItem(localStorage.key(index)) 
         const itemObject = JSON.parse(item)
         panier.push(itemObject)
     }
@@ -17,15 +17,15 @@ function récupérationCanapéAjoutéPanier() {
 
 // Elements à créer et afficher dans le panier
 function displayItem(item){
-    const article = créationArticle(item)
-    const divImage = créationImageDiv(item)
+    const article = creationArticle(item)
+    const divImage = creationImageDiv(item)
     article.appendChild(divImage)
     
-    const cartItemContent = créationContenuDuPanier(item)
+    const cartItemContent = creationContenuDuPanier(item)
     article.appendChild(cartItemContent)
     displayArticle(article)
 
-    displayQuantitéTotaleArticle()
+    displayQuantiteTotaleArticle()
     displayPrixTotalArticle()
 }
 
@@ -35,7 +35,7 @@ function displayArticle(article){
 }
 
 // Création de l'article "cart__item", sous forme d'élément HTML
-function créationArticle(item){
+function creationArticle(item){
     const article = document.createElement("article")
     article.classList.add("cart__item")
     article.dataset.id = item.productId
@@ -44,7 +44,7 @@ function créationArticle(item){
 }
 
 // Création de la div "cart__item__img", sous forme HTML
-function créationImageDiv(item){
+function creationImageDiv(item){
     const divImage = document.createElement("div")
     divImage.classList.add("cart__item__img")
 
@@ -56,12 +56,12 @@ function créationImageDiv(item){
 }
 
 // Création de la div "cart__item__content" et de son contenu, sous forme HTML
-function créationContenuDuPanier(item){ 
+function creationContenuDuPanier(item){ 
     const cartItemContent = document.createElement("div")
     cartItemContent.classList.add("cart__item__content")
 
-    const description = créationDescriptionCanapé(item)
-    const settings = créationSettings(item)
+    const description = creationDescriptionCanape(item)
+    const settings = creationSettings(item)
 
     cartItemContent.appendChild(description)
     cartItemContent.appendChild(settings)
@@ -69,7 +69,7 @@ function créationContenuDuPanier(item){
 }
 
 // Création de la div "cart__item__content__description" et de son contenu, sous forme HTML
-function créationDescriptionCanapé(item){
+function creationDescriptionCanape(item){
     const description = document.createElement("div")
     description.classList.add("cart__item__content__description")
     
@@ -88,17 +88,17 @@ function créationDescriptionCanapé(item){
 }
 
 // Création de la div "cart__item__content__settings", sous forme HTML
-function créationSettings(item){
+function creationSettings(item){
     const settings = document.createElement("div")
     settings.classList.add("cart__item__content__settings")
 
-    ajoutQuantitéAuSettings(settings, item)
+    ajoutQuantiteAuSettings(settings, item)
     ajoutDeleteAuSettings(settings, item)
     return settings
 }
 
 // Création de la div "cart__item__content__settings__quantity" et son contenu, sous forme HTML
-function ajoutQuantitéAuSettings(settings, item){
+function ajoutQuantiteAuSettings(settings, item){
     const quantité = document.createElement("div")
     quantité.classList.add("cart__item__content__settings__quantity")
 
@@ -113,7 +113,7 @@ function ajoutQuantitéAuSettings(settings, item){
     input.min = "1"
     input.max = "100"
     input.value = item.quantité
-    input.addEventListener("input", () => majQuantitéEtPrix(item.productId, input.value, item))
+    input.addEventListener("input", () => majQuantiteEtPrix(item.productId, input.value, item))
 
     quantité.appendChild(input)
     settings.appendChild(quantité)
@@ -123,7 +123,7 @@ function ajoutQuantitéAuSettings(settings, item){
 function ajoutDeleteAuSettings(settings, item){
     const divDelete = document.createElement("div")
     divDelete.classList.add("cart__item__content__settings__delete")
-    divDelete.addEventListener("click", () => suppressionCanapéPanier(item))
+    divDelete.addEventListener("click", () => suppressionCanapePanier(item))
 
     const pSupression = document.createElement("p")
     pSupression.textContent = "Supprimer"
@@ -133,24 +133,24 @@ function ajoutDeleteAuSettings(settings, item){
 }
 
 // Création de la fonction de supression d'un produit du panier
-function suppressionCanapéPanier(item){
+function suppressionCanapePanier(item){
     const canapéASupprimer = panier.findIndex(
     (canapé) => canapé.productId === item.productId && canapé.couleur === item.couleur)
     panier.splice(canapéASupprimer, 1)
 
-    displayQuantitéTotaleArticle()
+    displayQuantiteTotaleArticle()
     displayPrixTotalArticle()
 
-    suppressionDonnéesPanier(item)
+    suppressionDonneesPanier(item)
     suppressionArticleDePage(item)
 }
 
 // Création de la div "cart__price" et affichage quantité totale article panier, sous forme HTML
-function displayQuantitéTotaleArticle(){
+function displayQuantiteTotaleArticle(){
     let totalArticle = 0;
     const totalQuantité = document.querySelector("#totalQuantity")
-    panier.forEach(canapé => {
-    const quantitéTotalUnitaire = canapé.quantité
+    panier.forEach(canape => {
+    const quantitéTotalUnitaire = canape.quantité
     totalArticle += quantitéTotalUnitaire
     totalQuantité.textContent = totalArticle
     })
@@ -160,34 +160,34 @@ function displayQuantitéTotaleArticle(){
 function displayPrixTotalArticle(){
     let totalArticle = 0;
     const totalPrix = document.querySelector("#totalPrice")
-    panier.forEach(canapé => {
-    const prixTotalUnitaire = canapé.price * canapé.quantité
+    panier.forEach(canape => {
+    const prixTotalUnitaire = canape.price * canape.quantité
     totalArticle += prixTotalUnitaire
     totalPrix.textContent = totalArticle
     })
 }
 
 // Création fonction de mise à jour du prix et quantité total article du panier
-function majQuantitéEtPrix(productId, nouvelleValeur, item){
+function majQuantiteEtPrix(productId, nouvelleValeur, item){
     const articleAModifier = panier.find(item => item.productId === productId)
     articleAModifier.quantité = Number(nouvelleValeur)
     item.quantité = articleAModifier.quantité
 
     displayPrixTotalArticle()
-    displayQuantitéTotaleArticle()
+    displayQuantiteTotaleArticle()
 
-    sauvegardeEtMajDonnéesPanier(item)
+    sauvegardeEtMajDonneesPanier(item)
 }
 
 // Création fonction de mise à jour du cache lors de la modifs article panier
-function sauvegardeEtMajDonnéesPanier(item){
-    const newDonnéesASauvegarder = JSON.stringify(item)
+function sauvegardeEtMajDonneesPanier(item){
+    const newDonneesASauvegarder = JSON.stringify(item)
     const key = `${item.productId}-${item.couleur}`
-    localStorage.setItem(key, newDonnéesASauvegarder)
+    localStorage.setItem(key, newDonneesASauvegarder)
 }
 
 // Création fonction de suppression du cache lors de la suppression d'un article du panier
-function suppressionDonnéesPanier(item){
+function suppressionDonneesPanier(item){
     const key = `${item.productId}-${item.couleur}`
     localStorage.removeItem(key)
 }
@@ -209,10 +209,11 @@ function formulaireDeCommande(e){
     if (panier.length === 0) {
     alert("Oups ! Votre panier a l'air vide")
     return
-}
-
-// Vérification de la validité de tout les champs du formulaire
-    if (siFormulaireNonComplet()) return
+    }
+    
+    //if (siFormulaireNonComplet()) return 
+    if (siFormulaireNonComplet_new()) return 
+    
     if (siEmailNonValide()) return
 
     const corpsDuFormulaire = creationCorpsDuFormulaire()  
@@ -224,8 +225,8 @@ function formulaireDeCommande(e){
         },
     })
         .then(reponse => reponse.json())
-        .then ((données) => {
-            const numeroCommande = données.orderId
+        .then ((data) => {
+            const numeroCommande = data.orderId
             window.location.href = "confirmation.html" + "?orderId=" + numeroCommande
         })
         .catch((error) => console.error(error))
@@ -235,7 +236,7 @@ function formulaireDeCommande(e){
 function creationCorpsDuFormulaire(){
     const form = document.querySelector(".cart__order__form")
 
-    const firstname = form.elements.firstName.value
+    const firstname = form.elements.firstName.value 
     const lastname = form.elements.lastName.value
     const address = form.elements.address.value
     const city = form.elements.city.value
@@ -267,17 +268,16 @@ function recupIdDuCache(){
 }
 
 // Fonction de vérification de la completion de tout les champs du formulaire
-function siFormulaireNonComplet(){
+function siFormulaireNonComplet_new(){
     const form = document.querySelector(".cart__order__form")
-    const inputsFormulaire = form.querySelectorAll('input')
+    const inputsFormulaire = form.querySelectorAll('input') 
+    const validInputs = Array.from(inputsFormulaire).filter(input => input.value !== "");
 
-    for (input of inputsFormulaire) {
-        if (input.value === "") {
-            alert("Veillez à bien remplir tout les champs")
-            return true
-        }
-        return false
+    if (validInputs.length <6) {
+        alert ("Veillez à bien remplir tout les champs")
+        return true
     }
+    return false
 }
 
 // Fonction de vérification de la validité de l'adresse mail avec modèle REGEX
@@ -288,5 +288,5 @@ function siEmailNonValide(){
             alert("Vérifiez bien votre adresse email")
             return true
         }
-        return false
+    return false
 }
