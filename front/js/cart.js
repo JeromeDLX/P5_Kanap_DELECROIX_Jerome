@@ -3,7 +3,8 @@ const panier = [];
 
 // Appel des fonctions des données récupérées et, des éléments à afficher
 recuperationCanapeAjoutePanier()
-panier.forEach(item => displayItem(item))
+// panier.forEach(item => displayItem(item))
+panier.forEach(item => displayArticleFetch(item))
 
 // Récupération des données du ou des canapés en cache dans le panier
 function recuperationCanapeAjoutePanier() {
@@ -56,11 +57,11 @@ function creationImageDiv(item){
 }
 
 // Création de la div "cart__item__content" et de son contenu, sous forme HTML
-function creationContenuDuPanier(item){ 
+function creationContenuDuPanier(item,price){ 
     const cartItemContent = document.createElement("div")
     cartItemContent.classList.add("cart__item__content")
 
-    const description = creationDescriptionCanape(item)
+    const description = creationDescriptionCanape(item,price)
     const settings = creationSettings(item)
 
     cartItemContent.appendChild(description)
@@ -69,7 +70,7 @@ function creationContenuDuPanier(item){
 }
 
 // Création de la div "cart__item__content__description" et de son contenu, sous forme HTML
-function creationDescriptionCanape(item){
+function creationDescriptionCanape(item,price){
     const description = document.createElement("div")
     description.classList.add("cart__item__content__description")
     
@@ -78,7 +79,8 @@ function creationDescriptionCanape(item){
     const pCouleur = document.createElement("p")
     pCouleur.textContent = item.couleur
     const pPrice = document.createElement("p")
-    pPrice.textContent = item.price + "€"
+    pPrice.textContent = price + "€"
+    // pPrice.textContent = item.price + "€"
 
     description.appendChild(h2)
     description.appendChild(pCouleur)
@@ -137,12 +139,10 @@ function suppressionCanapePanier(item){
     const canapéASupprimer = panier.findIndex(
     (canapé) => canapé.productId === item.productId && canapé.couleur === item.couleur)
     panier.splice(canapéASupprimer, 1)
-
-    displayQuantiteTotaleArticle()
-    displayPrixTotalArticle()
-
+    
     suppressionDonneesPanier(item)
     suppressionArticleDePage(item)
+    totalQtePrix()
 }
 
 // Création de la div "cart__price" et affichage quantité totale article panier, sous forme HTML
@@ -172,11 +172,9 @@ function majQuantiteEtPrix(productId, nouvelleValeur, item){
     const articleAModifier = panier.find(item => item.productId === productId)
     articleAModifier.quantité = Number(nouvelleValeur)
     item.quantité = articleAModifier.quantité
-
-    displayPrixTotalArticle()
-    displayQuantiteTotaleArticle()
-
+    
     sauvegardeEtMajDonneesPanier(item)
+    totalQtePrix()
 }
 
 // Création fonction de mise à jour du cache lors de la modifs article panier
@@ -211,7 +209,6 @@ function formulaireDeCommande(e){
     return
     }
     
-    //if (siFormulaireNonComplet()) return 
     if (siFormulaireNonComplet_new()) return 
     
     if (siEmailNonValide()) return
@@ -267,7 +264,6 @@ function recupIdDuCache(){
     return idProduits
 }
 
-// Fonction de vérification de la completion de tout les champs du formulaire
 function siFormulaireNonComplet_new(){
     const form = document.querySelector(".cart__order__form")
     const inputsFormulaire = form.querySelectorAll('input') 
@@ -289,4 +285,61 @@ function siEmailNonValide(){
             return true
         }
     return false
+}
+
+
+/*************************FONCTIONS ASYNC *******************/
+const recuperationDonne = async () => {
+    let response = await fetch("http://localhost:3000/api/products/");
+    return await response.json();
+  };
+
+  // Obtenir tous les prix des produits qui se trouvent dans le panier
+  const fetchPrix = async () => {
+    listeArticle = await recuperationDonne();
+    let res = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        let item = localStorage.getItem(localStorage.key(i))
+        let data = JSON.parse(item)
+        idProduct1 = data.productId;
+      result = listeArticle.filter((article) => article._id === idProduct1);
+      res.push(result[0]);
+    }
+    return res;
+  };
+  
+
+  // Calcul des totaux prix et quantite
+async function totalQtePrix() {
+    let listePrix = await fetchPrix();
+    let sommeQte = 0;
+    let sommePrix = 0;
+
+    document.querySelectorAll(".itemQuantity").forEach((element, i) => {
+      sommeQte += parseInt(element.value);
+      sommePrix += listePrix[0].price * parseInt(element.value);
+    });
+
+    document.getElementById("totalPrice").innerText = sommePrix;
+    document.getElementById("totalQuantity").innerText = sommeQte;
+  }
+
+  // Afficher un article
+  async function displayArticleFetch(item) {
+    const response = await fetch(`http://localhost:3000/api/products/${item.productId}`)
+
+    var data = await response.json();
+    price = data.price
+
+    const article = creationArticle(item)
+    const divImage = creationImageDiv(item)
+    article.appendChild(divImage)
+    
+    const cartItemContent = creationContenuDuPanier(item,price)
+    article.appendChild(cartItemContent)
+    displayArticle(article)
+    totalQtePrix()
+
+    return data.price
+
 }
