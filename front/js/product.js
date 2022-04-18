@@ -82,7 +82,6 @@ if (boutonAjoutPanier !=null){
             productId: productId,
             couleur: couleur,
             quantité: Number(quantité),
-            price: prixIndividuel,
             imageUrl: imgUrl,
             altTxt: altText,
             name: nameArticle
